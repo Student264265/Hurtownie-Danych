@@ -1,0 +1,146 @@
+{% extends 'main/base.html' %}
+
+
+
+{% block headblock %}
+<style>
+    .float-container{
+        border: 3px solid #fff;
+        padding: 20px;
+        width: 90%;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .float-one{
+        float: left;
+        border: 2px solid rgb(0, 255, 255);
+    }
+
+    .float-two{
+        float: left;
+        border: 2px solid rgb(0, 255, 255);
+    }
+
+    canvas{
+        width: 580;
+    }
+</style>
+{% endblock %}
+
+
+
+<!--Body-->
+{% block content %}
+<div class="float-container">
+    <div style="display: table-row"></div>
+        <div class="float-one">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="float-two">
+            <form method="post" action="">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit", name="save">Add data</button>
+            </form>
+            <p>{{ msg }}</p>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // @ts-nocheck
+    const ctx = document.getElementById('myChart');
+
+    const titles = {{ titles|safe }};
+    const data = {{ data|safe }};
+  
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                {
+                    label: titles[0],
+                    data: data[0]
+                    .map(val => ({
+                        x: val[0],
+                        y: val[1],
+                    })),
+                    backgroundColor: '#ffffff',
+                    borderColor: '#0be646',
+                    borderWidth: 2,
+                    pointStyle: 'circ',
+                    pointRadius: 7,
+                },
+                {
+                    label: titles[1],
+                    data: data[1]
+                    .map(val => ({
+                        x: val[0],
+                        y: val[1],
+                    })),
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    pointStyle: 'circ',
+                    pointRadius: 4,
+                },
+                {
+                    label: titles[2],
+                    data: data[2]
+                    .map(val => ({
+                        x: val[0],
+                        y: val[1],
+                    })),
+                    backgroundColor: '#0a15f0',
+                    borderColor: '#0a15f0',
+                    borderWidth: 2,
+                    pointStyle: 'dash',
+                    pointRadius: 20,
+                },
+                {
+                    label: titles[3],
+                    data: data[3]
+                    .map(val => ({
+                        x: val[0],
+                        y: val[1],
+                    })),
+                    backgroundColor: '#e60505',
+                    borderColor: '#e60505',
+                    borderWidth: 2,
+                    pointStyle: 'triangle',
+                    pointRadius: 7,
+                },
+                
+                {
+                    label: titles[4],
+                    data: data[4]
+                    .map(val => ({
+                        x: val[0],
+                        y: val[1],
+                    })),
+                    backgroundColor: '#e307e3',
+                    borderColor: '#e307e3',
+                    borderWidth: 2,
+                    pointStyle: 'rect',
+                    pointRadius: 7,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: false,
+            aspectRatio: 1,
+        }
+    });
+</script>
+
+{% endblock %}
